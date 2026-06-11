@@ -1,4 +1,4 @@
-import { StatusBar } from "expo-status-bar";
+vimport { StatusBar } from "expo-status-bar";
 import { useMemo, useState } from "react";
 import {
   Pressable,
@@ -36,6 +36,8 @@ type Hexagram = {
   theme: string;
   counsel: string;
 };
+
+
 
 const trigrams = {
   "111": "Qian",
@@ -138,7 +140,7 @@ const hexagrams: Hexagram[] = [
 ];
 
 const byNumber = Object.fromEntries(hexagrams.map((hexagram) => [hexagram.number, hexagram])) as Record<number, Hexagram>;
-const geminiBackendUrl = "http://192.168.1.12:8787/api/iching";
+const geminiBackendUrl = "https://iching-fortune-app.onrender.com/api/iching";
 
 const chineseReadings: Record<number, { name: string; theme: string; counsel: string }> = {
   1: { name: "乾为天", theme: "刚健、自强、开创", counsel: "时机有力，宜主动推进。凡事先正其心，再用其势；刚中有度，成事更稳。" },
