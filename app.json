@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "易经占卜",
+    "slug": "yi-jing-fortune",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ypfuns.yijingfortune"
+    },
+    "android": {
+      "package": "com.ypfuns.yijingfortune"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
