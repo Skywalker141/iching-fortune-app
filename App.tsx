@@ -1,4 +1,4 @@
-vimport { StatusBar } from "expo-status-bar";
+import { StatusBar } from "expo-status-bar";
 import { useMemo, useState } from "react";
 import {
   Pressable,
@@ -604,14 +604,14 @@ export default function App() {
           </View>
 
           <View style={styles.geminiPanel}>
-            <Text style={styles.panelLabel}>AI 解卦</Text>
-            <Text style={styles.geminiHint}>由后台连接 Gemini，API Key 不会保存在 App 内。</Text>
+            <Text style={styles.panelLabel}>解卦</Text>
+            <Text style={styles.geminiHint}>请点击开始解卦。</Text>
             <Pressable
               style={({ pressed }) => [styles.geminiButton, geminiLoading && styles.disabledButton, pressed && styles.buttonPressed]}
               onPress={askGemini}
               disabled={geminiLoading}
             >
-              <Text style={styles.geminiButtonText}>{geminiLoading ? "Gemini 解卦中..." : "开始 Gemini 解卦"}</Text>
+              <Text style={styles.geminiButtonText}>{geminiLoading ? " 解卦中..." : "开始  解卦"}</Text>
             </Pressable>
             {geminiAnswer ? (
               <Pressable
