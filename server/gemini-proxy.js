@@ -1,7 +1,7 @@
 const http = require("http");
 
 const port = Number(process.env.PORT || 8787);
-const model = process.env.GEMINI_MODEL || "gemini-2.0-flash-lite";
+const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const apiKey = process.env.GEMINI_API_KEY;
 
 function sendJson(response, statusCode, payload) {
