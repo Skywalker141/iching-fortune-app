@@ -87,7 +87,7 @@ async function handleIching(request, response) {
     let finishReason = "";
 
     for (let attempt = 0; attempt < 3; attempt += 1) {
-      const result = await generateText(contents, attempt === 0 ? 2400 : 1200);
+      const result = await generateText(contents, attempt === 0 ? 4096 : 2048);
       if (result.text) {
         chunks.push(result.text);
       }
