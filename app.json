@@ -10,7 +10,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ypfuns.yijingfortune"
+      "bundleIdentifier": "com.ypfuns.yijingfortune",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.ypfuns.yijingfortune"
