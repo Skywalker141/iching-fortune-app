@@ -553,18 +553,18 @@ export default function App() {
 
       if (!response.ok) {
         const message = typeof data.error === "string" ? data.error : data.error?.message;
-        throw new Error(message || "Gemini 后台请求失败，请检查服务器或网络。");
+        throw new Error(message || "后台请求失败，请检查服务器或网络。");
       }
 
       const text = data.text?.trim();
       if (!text) {
-        throw new Error("Gemini 没有返回解卦内容，请稍后重试。");
+        throw new Error("没有返回解卦内容，请稍后重试。");
       }
       setGeminiAnswer(text);
       setGeminiFinishReason(data.finishReason || "");
       setPage("answer");
     } catch (error) {
-      setGeminiError(error instanceof Error ? error.message : "Gemini 解卦失败，请稍后重试。");
+      setGeminiError(error instanceof Error ? error.message : "解卦失败，请稍后重试。");
     } finally {
       setGeminiLoading(false);
     }
@@ -643,15 +643,15 @@ export default function App() {
               </Pressable>
             </View>
             <Text style={styles.appName}>完整解卦结果</Text>
-            <Text style={styles.pageHeadline}>Gemini 已根据本卦、变爻与之卦生成解读。</Text>
+            <Text style={styles.pageHeadline}> 已根据本卦、变爻与之卦生成解读。</Text>
           </View>
 
           {question.trim().length > 0 ? <Text style={styles.questionEcho}>所问：{question.trim()}</Text> : null}
 
           <View style={styles.answerPanel}>
-            <Text style={styles.panelLabel}>Gemini 解卦全文</Text>
+            <Text style={styles.panelLabel}> 解卦全文</Text>
             {geminiFinishReason && geminiFinishReason !== "STOP" ? (
-              <Text style={styles.answerWarning}>Gemini 返回状态：{geminiFinishReason}。如果内容仍不完整，请点“返回解卦”后重新解卦。</Text>
+              <Text style={styles.answerWarning}> 返回状态：{geminiFinishReason}。如果内容仍不完整，请点“返回解卦”后重新解卦。</Text>
             ) : null}
             {splitAnswerParagraphs(geminiAnswer).map((paragraph, index) => (
               <Text key={`${index}-${paragraph.slice(0, 12)}`} selectable style={styles.answerParagraph}>
@@ -725,12 +725,12 @@ export default function App() {
             <HexagramCard title="之卦" hexagram={reading.relating} />
             <View style={styles.nextPanel}>
               <Text style={styles.nextTitle}>卦象已成</Text>
-              <Text style={styles.nextCopy}>进入新页面，让 Gemini 结合问题、本卦、变爻与之卦生成完整解读。</Text>
+              <Text style={styles.nextCopy}>进入新页面，本卦、变爻与之卦生成完整解读。</Text>
               <Pressable
                 style={({ pressed }) => [styles.geminiButton, pressed && styles.buttonPressed]}
                 onPress={() => setPage("gemini")}
               >
-                <Text style={styles.geminiButtonText}>进入 Gemini 解卦页</Text>
+                <Text style={styles.geminiButtonText}>进入解卦页</Text>
               </Pressable>
             </View>
           </View>
