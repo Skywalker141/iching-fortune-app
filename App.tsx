@@ -19,6 +19,7 @@ type CastRecord = {
 };
 
 type Page = "casting" | "gemini" | "answer";
+type Language = "zh" | "en";
 
 type GeminiResponse = {
   text?: string;
@@ -260,13 +261,15 @@ function buildGeminiPrompt({
   primary,
   relating,
   changingLines,
-  casts
+  casts,
+  language
 }: {
   question: string;
   primary: Hexagram;
   relating: Hexagram;
   changingLines: Array<{ line: LineValue; position: number }>;
   casts: CastRecord[];
+  language: Language;
 }) {
   const primaryReading = chineseReadings[primary.number];
   const relatingReading = chineseReadings[relating.number];
@@ -354,7 +357,7 @@ function buildGeminiPrompt({
 
 # 输出要求
 
-语言：中文。
+语言：${language === "zh" ? "简体中文" : "English"}
 
 风格：像资深易经老师，直接、沉稳、具体。
 
@@ -539,6 +542,7 @@ function HexagramCard({
 
 export default function App() {
   const [question, setQuestion] = useState("");
+  const [language, setLanguage] = useState<Language>("zh");
   const [casts, setCasts] = useState<CastRecord[]>([]);
   const [geminiAnswer, setGeminiAnswer] = useState("");
   const [geminiError, setGeminiError] = useState("");
@@ -598,7 +602,8 @@ export default function App() {
         primary: reading.primary,
         relating: reading.relating,
         changingLines: reading.changingLines,
-        casts
+        casts,
+        language
       });
       const response = await fetch(geminiBackendUrl, {
         method: "POST",
@@ -743,6 +748,27 @@ export default function App() {
             multiline
             style={styles.input}
           />
+          <View style={styles.languageRow}>
+  <Pressable
+    style={[
+      styles.languageButton,
+      language === "zh" && styles.languageButtonActive
+    ]}
+    onPress={() => setLanguage("zh")}
+  >
+    <Text style={styles.languageButtonText}>中文</Text>
+  </Pressable>
+
+  <Pressable
+    style={[
+      styles.languageButton,
+      language === "en" && styles.languageButtonActive
+    ]}
+    onPress={() => setLanguage("en")}
+  >
+    <Text style={styles.languageButtonText}>English</Text>
+  </Pressable>
+</View>
           <View style={styles.actionRow}>
             <Pressable style={({ pressed }) => [styles.castButton, casts.length > 0 && styles.actionButton, pressed && styles.buttonPressed]} onPress={cast}>
               <Text style={styles.castButtonText}>
@@ -801,7 +827,30 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  languageRow: {
+  flexDirection: "row",
+  gap: 10,
+  marginTop: 12
+},
+languageButton: {
+  flex: 1,
+  height: 42,
+  borderRadius: 6,
+  borderWidth: 1,
+  borderColor: "#8c6d3b",
+  alignItems: "center",
+  justifyContent: "center"
+},
+languageButtonActive: {
+  backgroundColor: "#2f5d50",
+  borderColor: "#2f5d50"
+},
+languageButtonText: {
+  color: "#211a14",
+  fontSize: 15,
+  fontWeight: "800"
+},
+safeArea: {
     flex: 1,
     backgroundColor: "#17130f"
   },
