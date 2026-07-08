@@ -470,21 +470,27 @@ function Coin({ value }: { value: CoinValue }) {
   );
 }
 
-function CastHistory({ casts }: { casts: CastRecord[] }) {
+function CastHistory({ casts,language, }: { casts: CastRecord[];language:Language; }) {
   if (casts.length === 0) {
     return (
       <View style={styles.emptyPanel}>
-        <Text style={styles.emptyTitle}>请先静心</Text>
+        <Text style={styles.emptyTitle}>
+  {language === "zh" ? "请先静心" : "Be Calm First"}
+</Text>
         <Text style={styles.emptyCopy}>
-          心中默念所问之事，怀着虔诚点击起爻。每次三枚铜钱，正面为3，反面为2，连续六次后成卦。
-        </Text>
+  {language === "zh"
+    ? "心中默念所问之事，怀着虔诚点击起卦。每次三枚铜钱，正面为3，反面为2，连续六次后成卦。"
+    : "Quiet your mind and focus on your question. Tap to cast six times. Each cast uses three coins: Heads = 3, Tails = 2."}
+</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.castsPanel}>
-      <Text style={styles.panelLabel}>起卦记录</Text>
+      <Text style={styles.panelLabel}>
+  {language === "zh" ? "起卦记录" : "Cast History"}
+</Text>
       {casts.map((cast, index) => (
         <View key={`${cast.sum}-${index}`} style={styles.castRecord}>
           <View style={styles.castRecordHeader}>
@@ -642,21 +648,27 @@ export default function App() {
         <ScrollView contentContainerStyle={styles.content}>
           <View style={styles.pageHeader}>
             <Pressable style={({ pressed }) => [styles.backButton, pressed && styles.buttonPressed]} onPress={() => setPage("casting")}>
-              <Text style={styles.backButtonText}>返回起卦</Text>
+              <Text style={styles.backButtonText}>{language === "zh" ? "返回起卦" : "back"}</Text>
             </Pressable>
-            <Text style={styles.appName}>Gemini 实时解卦</Text>
-            <Text style={styles.pageHeadline}>结合本卦、变爻与之卦，生成完整解读。</Text>
+            <Text style={styles.appName}>{language === "zh" ? "实时解卦" :"I-Ching Reading"}</Text>
+            <Text style={styles.pageHeadline}>{language === "zh" ? "结合本卦、变爻与之卦，生成完整解读" : "Reading from the hexagrams"}</Text>
           </View>
 
-          {question.trim().length > 0 ? <Text style={styles.questionEcho}>所问：{question.trim()}</Text> : null}
+          {question.trim().length > 0 ? (
+  <Text style={styles.questionEcho}>
+    {language === "zh" ? `所问：${question.trim()}` : `Question: ${question.trim()}`}
+  </Text>
+) : null}
 
           <View style={styles.geminiSummaryGrid}>
-            <HexagramCard title="本卦" hexagram={reading.primary} lines={completedLines} showLines />
-            <HexagramCard title="之卦" hexagram={reading.relating} />
+            <HexagramCard title={language === "zh" ? "本卦" : "Primary Hexagram"} hexagram={reading.primary} lines={completedLines} showLines />
+<HexagramCard title={language === "zh" ? "之卦" : "Relating Hexagram"} hexagram={reading.relating} />
           </View>
 
           <View style={styles.changesPanel}>
-            <Text style={styles.panelLabel}>变爻</Text>
+            <Text style={styles.panelLabel}>
+  {language === "zh" ? "变爻" : "Changing Lines"}
+</Text>
             {reading.changingLines.length > 0 ? (
               reading.changingLines.map(({ line, position }) => (
                 <Text key={position} style={styles.changeText}>
@@ -664,26 +676,44 @@ export default function App() {
                 </Text>
               ))
             ) : (
-              <Text style={styles.changeText}>无变爻。此卦以本卦为主，表示局面较为稳定，宜细看本卦之意。</Text>
+              <Text style={styles.changeText}>
+  {language === "zh"
+    ? "无变爻。此卦以本卦为主，表示局面较为稳定，宜细看本卦之意。"
+    : "No changing lines. The reading mainly follows the primary hexagram, suggesting a relatively stable situation."}
+</Text>
             )}
           </View>
 
           <View style={styles.geminiPanel}>
-            <Text style={styles.panelLabel}>解卦</Text>
-            <Text style={styles.geminiHint}>请点击开始解卦。</Text>
+            <Text style={styles.panelLabel}>
+  {language === "zh" ? "解卦" : "Reading"}
+</Text>
+            <Text style={styles.geminiHint}>
+  {language === "zh" ? "请点击开始解卦。" : "Tap the button to begin your reading."}
+</Text>
             <Pressable
               style={({ pressed }) => [styles.geminiButton, geminiLoading && styles.disabledButton, pressed && styles.buttonPressed]}
               onPress={askGemini}
               disabled={geminiLoading}
             >
-              <Text style={styles.geminiButtonText}>{geminiLoading ? " 解卦中..." : "开始  解卦"}</Text>
+              <Text style={styles.geminiButtonText}>
+  {geminiLoading
+    ? language === "zh"
+      ? "解卦中..."
+      : "Reading..."
+    : language === "zh"
+      ? "开始解卦"
+      : "Start Reading"}
+</Text>
             </Pressable>
             {geminiAnswer ? (
               <Pressable
                 style={({ pressed }) => [styles.secondaryFullButton, pressed && styles.buttonPressed]}
                 onPress={() => setPage("answer")}
               >
-                <Text style={styles.secondaryFullButtonText}>查看完整解卦结果</Text>
+                <Text style={styles.secondaryFullButtonText}>
+  {language === "zh" ? "查看完整解卦结果" : "View Full Reading"}
+</Text>
               </Pressable>
             ) : null}
             {geminiError ? <Text style={styles.geminiError}>{geminiError}</Text> : null}
@@ -734,16 +764,23 @@ export default function App() {
       <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.appName}>易经占卜</Text>
-          <Text style={styles.headline}>心诚一问，六爻成卦，观其变化。</Text>
+          <Text style={styles.appName}>
+           {language === "zh" ? "易经占卜" : "I Ching Fortune"}
+          </Text>
+
+          <Text style={styles.headline}>
+           {language === "zh"? "六爻成卦，观其变化。" : "Cast 6 Lines ,Discover Your Fortune."}
+          </Text>
         </View>
 
         <View style={styles.askPanel}>
-          <Text style={styles.inputLabel}>你的问题</Text>
+          <Text style={styles.inputLabel}>
+            {language === "zh" ? "你的问题" : "Your Question"}
+          </Text>
           <TextInput
             value={question}
             onChangeText={setQuestion}
-            placeholder="我想请问关于..."
+           placeholder={language === "zh"? "我想请问关于..." : "What would you like to ask?"}
             placeholderTextColor="#8b8173"
             multiline
             style={styles.input}
@@ -772,32 +809,50 @@ export default function App() {
           <View style={styles.actionRow}>
             <Pressable style={({ pressed }) => [styles.castButton, casts.length > 0 && styles.actionButton, pressed && styles.buttonPressed]} onPress={cast}>
               <Text style={styles.castButtonText}>
-                {casts.length >= 6 ? "重新开始起爻" : `点击起第${casts.length + 1}爻`}
-              </Text>
+                 {language === "zh"? casts.length >= 6 ? "重新开始起爻" : `点击起第${casts.length + 1}爻` :       casts.length >= 6 ? "Restart Casting"
+      : `Cast Line ${casts.length + 1} of 6`}
+             </Text>
             </Pressable>
             {casts.length > 0 ? (
               <Pressable style={({ pressed }) => [styles.endButton, styles.actionButton, pressed && styles.buttonPressed]} onPress={endGame}>
-                <Text style={styles.endButtonText}>结束游戏</Text>
+                <Text style={styles.endButtonText}>
+  {language === "zh" ? "结束游戏" : "End"}
+</Text>
               </Pressable>
             ) : null}
           </View>
         </View>
 
         <View style={styles.progressPanel}>
-          <Text style={styles.progressText}>已起 {casts.length} / 6 爻</Text>
+          <Text style={styles.progressText}>{language === "zh" ? `已起 ${casts.length} / 6 爻`
+: `${casts.length} / 6 Lines Cast`}
+          </Text>
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: `${(casts.length / 6) * 100}%` }]} />
           </View>
         </View>
 
-        <CastHistory casts={casts} />
+        <CastHistory casts={casts} language={language} />
 
         {reading && completedLines ? (
           <View style={styles.results}>
-            {question.trim().length > 0 ? <Text style={styles.questionEcho}>所问：{question.trim()}</Text> : null}
-            <HexagramCard title="本卦" hexagram={reading.primary} lines={completedLines} showLines />
+            {question.trim().length > 0 ? (
+  <Text style={styles.questionEcho}>
+    {language === "zh"
+      ? `所问：${question.trim()}`
+      : `Question: ${question.trim()}`}
+  </Text>
+) : null}
+            <HexagramCard
+  title={language === "zh" ? "本卦" : "Primary Hexagram"}
+  hexagram={reading.primary}
+  lines={completedLines}
+  showLines
+/>
             <View style={styles.changesPanel}>
-              <Text style={styles.panelLabel}>变爻</Text>
+              <Text style={styles.panelLabel}>
+  {language === "zh" ? "变爻" : "Changing Lines"}
+</Text>
               {reading.changingLines.length > 0 ? (
                 reading.changingLines.map(({ line, position }) => (
                   <Text key={position} style={styles.changeText}>
@@ -808,16 +863,27 @@ export default function App() {
                 <Text style={styles.changeText}>无变爻。此卦以本卦为主，表示局面较为稳定，宜细看本卦之意。</Text>
               )}
             </View>
-            <HexagramCard title="之卦" hexagram={reading.relating} />
+            <HexagramCard
+  title={language === "zh" ? "之卦" : "Relating Hexagram"}
+  hexagram={reading.relating}
+/>
             <View style={styles.nextPanel}>
-              <Text style={styles.nextTitle}>卦象已成</Text>
-              <Text style={styles.nextCopy}>进入新页面，本卦、变爻与之卦生成完整解读。</Text>
+              <Text style={styles.nextTitle}>
+  {language === "zh" ? "卦象已成" : "Hexagram Complete"}
+</Text>
+              <Text style={styles.nextCopy}>
+  {language === "zh"
+    ? "进入新页面，本卦、变爻与之卦生成完整解读。"
+    : "Continue to generate a full reading from the primary hexagram, changing lines, and relating hexagram."}
+</Text>
               <Pressable
-                style={({ pressed }) => [styles.geminiButton, pressed && styles.buttonPressed]}
-                onPress={() => setPage("gemini")}
-              >
-                <Text style={styles.geminiButtonText}>进入解卦页</Text>
-              </Pressable>
+  style={({ pressed }) => [styles.geminiButton, pressed && styles.buttonPressed]}
+  onPress={() => setPage("gemini")}
+>
+  <Text style={styles.geminiButtonText}>
+    {language === "zh" ? "进入解卦页" : "Start Reading"}
+  </Text>
+</Pressable>
             </View>
           </View>
         ) : null}
